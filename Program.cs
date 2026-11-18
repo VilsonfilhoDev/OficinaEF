@@ -6,7 +6,7 @@ using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var connectionString = builder.Configuration.GetConnectionString("deployCOnnection")
     ?? throw new InvalidOperationException("Configure DefaultConnection no appsettings.json.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
