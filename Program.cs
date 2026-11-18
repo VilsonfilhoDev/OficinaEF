@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OficinaEF.Data;
 using OficinaEF.Infrastructure;
@@ -24,6 +24,9 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+// Cria os perfis Admin, Atendente e Cliente se ainda não existirem
+await IdentitySeeder.SeedRolesAsync(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {

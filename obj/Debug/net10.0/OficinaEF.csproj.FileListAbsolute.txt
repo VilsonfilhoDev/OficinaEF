@@ -334,7 +334,6 @@ C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\c
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\nezrqnk58p-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\v0zgfp0y55-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\yfc7ypekbg-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\bcllcij3vu-{0}-lir0tvqgw2-lir0tvqgw2.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\6hf2k0rjsx-{0}-vx3kdc537u-vx3kdc537u.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\t599pvvon0-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\xbnd8c9ugl-{0}-61n19gt1b8-61n19gt1b8.gz
@@ -411,3 +410,5 @@ C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\r
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.pdb
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.genruntimeconfig.cache
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\ref\OficinaEF.dll
+C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.sourcelink.json
+C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\bcllcij3vu-{0}-9076tekg4e-9076tekg4e.gz

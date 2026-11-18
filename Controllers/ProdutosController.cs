@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using OficinaEF.Models;
 
 namespace OficinaEF.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Atendente")]
     public class ProdutosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,13 +18,24 @@ namespace OficinaEF.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoriaId)
         {
-            List<Produto> produtos = await _context.Produtos
+            IQueryable<Produto> consulta = _context.Produtos
                 .AsNoTracking()
-                .Include(p => p.Categoria)
-                .OrderBy(p => p.Nome)
-                .ToListAsync();
+                .Include(p => p.Categoria);
+
+            // Filtro opcional por categoria (link "Ver produtos" na tela de Categorias)
+            if (categoriaId.HasValue)
+            {
+                consulta = consulta.Where(p => p.CategoriaId == categoriaId.Value);
+                ViewBag.CategoriaFiltro = await _context.Categorias
+                    .AsNoTracking()
+                    .Where(c => c.Id == categoriaId.Value)
+                    .Select(c => c.Nome)
+                    .FirstOrDefaultAsync();
+            }
+
+            List<Produto> produtos = await consulta.OrderBy(p => p.Nome).ToListAsync();
 
             return View(produtos);
         }

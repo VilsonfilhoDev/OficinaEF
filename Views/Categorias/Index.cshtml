@@ -1,21 +1,76 @@
-@model IEnumerable<OficinaEF.Models.Categoria>
+﻿@model IEnumerable<Categoria>
 
 @{
     ViewData["Title"] = "Categorias";
 }
 
-<h1>Categorias</h1>
+<div class="d-flex justify-content-between
+            align-items-center mb-3">
+    <h1>Categorias</h1>
 
-<div class="list-group">
-@foreach (var cat in Model)
-{
-    <a asp-controller="Produtos" asp-action="Index" asp-route-categoriaId="@cat.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-        <div>
-            <strong>@cat.Nome</strong>
-            <p class="mb-0 text-muted">@cat.Descricao</p>
-        </div>
-        <span class="badge bg-primary rounded-pill">Ver Produtos</span>
+    <a asp-action="Create"
+       class="btn btn-success">
+        Nova categoria
     </a>
-    <a asp-action="Delete" asp-route-id="@cat.Id" class="btn btn-sm btn-danger ms-2">Excluir</a>
+</div>
+
+@if (TempData["Sucesso"] is not null)
+{
+    <div class="alert alert-success">
+        @TempData["Sucesso"]
+    </div>
 }
+
+@if (TempData["Erro"] is not null)
+{
+    <div class="alert alert-danger">
+        @TempData["Erro"]
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Produtos</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Categoria categoria in Model)
+            {
+                <tr>
+                    <td>@categoria.Nome</td>
+                    <td>@categoria.Descricao</td>
+                    <td>
+                        <a asp-controller="Produtos"
+                           asp-action="Index"
+                           asp-route-categoriaId="@categoria.Id">@categoria.Produtos.Count</a>
+                    </td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-id="@categoria.Id"
+                           class="btn btn-primary btn-sm">
+                            Detalhes
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@categoria.Id"
+                           class="btn btn-warning btn-sm">
+                            Editar
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@categoria.Id"
+                           class="btn btn-danger btn-sm">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

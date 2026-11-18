@@ -1,0 +1,88 @@
+@model OficinaEF.Models.Pedido
+
+@{
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+}
+
+<h2>Pedido #@Model.Id</h2>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["Erro"]</div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Dados do pedido</h5>
+                <p class="card-text"><strong>Código:</strong> @Model.CodigoSolicitacao</p>
+                <p class="card-text"><strong>Data:</strong> @Model.DataPedido.ToString("dd/MM/yyyy HH:mm")</p>
+                <p class="card-text"><strong>Status:</strong>
+                    <span class="badge @(Model.Status == OficinaEF.Models.StatusPedido.Recebido ? "bg-warning text-dark" : Model.Status == OficinaEF.Models.StatusPedido.Concluido ? "bg-success" : "bg-danger")">
+                        @Model.Status
+                    </span>
+                </p>
+                <p class="card-text"><strong>Endereço:</strong> @Model.EnderecoEntrega</p>
+                <p class="card-text"><strong>Pagamento:</strong> @Model.FormaPagamento</p>
+                <p class="card-text"><strong>Total:</strong> @Model.ValorTotal.ToString("C2")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Itens</h5>
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>Produto</th><th class="text-end">Preço</th><th class="text-center">Qtd</th><th class="text-end">Subtotal</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Itens)
+                        {
+                            <tr>
+                                <td>@item.NomeProduto</td>
+                                <td class="text-end">@item.PrecoUnitario.ToString("C2")</td>
+                                <td class="text-center">@item.Quantidade</td>
+                                <td class="text-end">@((item.PrecoUnitario * item.Quantidade).ToString("C2"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    var podeConcluir = (User.IsInRole("Admin") || User.IsInRole("Atendente")) && Model.Status == OficinaEF.Models.StatusPedido.Recebido;
+    var podeCancelar = Model.Status == OficinaEF.Models.StatusPedido.Recebido &&
+        (User.IsInRole("Admin") || User.IsInRole("Atendente") || Model.UsuarioId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+}
+
+@if (podeConcluir || podeCancelar)
+{
+    <div class="mt-4">
+        @if (podeConcluir)
+        {
+            <form asp-action="Concluir" asp-route-id="@Model.Id" method="post" style="display:inline">
+                <button type="submit" class="btn btn-success">Concluir pedido</button>
+            </form>
+        }
+        @if (podeCancelar)
+        {
+            <form asp-action="Cancelar" asp-route-id="@Model.Id" method="post" style="display:inline; margin-left:10px">
+                <button type="submit" class="btn btn-danger">Cancelar pedido</button>
+            </form>
+        }
+        <a class="btn btn-secondary" href="@(User.IsInRole("Admin") || User.IsInRole("Atendente") ? Url.Action("Gestao") : Url.Action("Index"))">Voltar</a>
+    </div>
+}
+else
+{
+    <a class="btn btn-secondary" href="@(User.IsInRole("Admin") || User.IsInRole("Atendente") ? Url.Action("Gestao") : Url.Action("Index"))">Voltar</a>
+}

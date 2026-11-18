@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OficinaEF.Data;
@@ -6,7 +6,7 @@ using OficinaEF.Models;
 
 namespace OficinaEF.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Atendente")]
     public class CategoriasController : Controller
     {
         private readonly ApplicationDbContext _context;

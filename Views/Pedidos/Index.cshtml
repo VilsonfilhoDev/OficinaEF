@@ -1,0 +1,56 @@
+@model List<OficinaEF.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Meus Pedidos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["Erro"]</div>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info">Você ainda não tem pedidos.</div>
+    <a class="btn btn-primary" href="/">Ir para a loja</a>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nº Pedido</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th class="text-end">Total</th>
+                <th class="text-end">Itens</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pedido in Model)
+            {
+                <tr>
+                    <td>#@pedido.Id</td>
+                    <td>@pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <span class="badge @(pedido.Status == OficinaEF.Models.StatusPedido.Recebido ? "bg-warning text-dark" : pedido.Status == OficinaEF.Models.StatusPedido.Concluido ? "bg-success" : "bg-danger")">
+                            @pedido.Status
+                        </span>
+                    </td>
+                    <td class="text-end">@pedido.ValorTotal.ToString("C2")</td>
+                    <td class="text-center">@pedido.Itens.Count</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@pedido.Id">Ver detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

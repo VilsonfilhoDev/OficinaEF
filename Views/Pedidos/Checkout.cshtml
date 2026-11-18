@@ -1,0 +1,94 @@
+@model OficinaEF.Controllers.PedidosController.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Finalizar compra";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!string.IsNullOrEmpty(ViewData["Erro"] as string))
+{
+    <div class="alert alert-danger">@ViewData["Erro"]</div>
+}
+
+@if (Model.Itens == null || Model.Itens.Count == 0)
+{
+    <div class="alert alert-warning">O carrinho está vazio. Adicione produtos na Home antes de finalizar a compra.</div>
+    <a class="btn btn-secondary" href="/">Voltar à loja</a>
+}
+else
+{
+    <form asp-action="Checkout" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="CodigoSolicitacao" />
+
+        @for (var i = 0; i < Model.Itens.Count; i++)
+        {
+            <input type="hidden" name="itens[@i].ProdutoId" value="@Model.Itens[i].ProdutoId" />
+            <input type="hidden" name="itens[@i].Nome" value="@Model.Itens[i].Nome" />
+            <input type="hidden" name="itens[@i].Preco" value="@Model.Itens[i].Preco.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+            <input type="hidden" name="itens[@i].Quantidade" value="@Model.Itens[i].Quantidade" />
+        }
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header"><h5>Dados da entrega</h5></div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Endereço de entrega</label>
+                            <textarea class="form-control" asp-for="EnderecoEntrega" rows="3" placeholder="Rua, número, bairro, CEP, complemento"></textarea>
+                            <span class="text-danger" asp-validation-for="EnderecoEntrega"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Forma de pagamento</label>
+                            <select class="form-select" asp-for="FormaPagamento">
+                                <option value="">Selecione</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                <option value="PIX">PIX</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="FormaPagamento"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header"><h5>Resumo do carrinho</h5></div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr><th>Produto</th><th class="text-end">Preço</th><th class="text-center">Qtd</th><th class="text-end">Subtotal</th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Itens)
+                                {
+                                    <tr>
+                                        <td>@item.Nome</td>
+                                        <td class="text-end">@item.Preco.ToString("C2")</td>
+                                        <td class="text-center">@item.Quantidade</td>
+                                        <td class="text-end">@((item.Preco * item.Quantidade).ToString("C2"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total</span>
+                            <span>@Model.ValorTotal.ToString("C2")</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Confirmar pedido</button>
+                    <a class="btn btn-outline-secondary mt-2" href="/">Continuar comprando</a>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
