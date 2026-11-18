@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/OficinaEF.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pedidos.css" asp-append-version="true" />
 </head>
 
 <body>
@@ -37,17 +38,17 @@
                         }
                         @if (User.IsInRole("Atendente"))
                         {
-                            <li class="nav-item">
+                            @* <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home"
                                    asp-action="Atendente">Atendente</a>
-                            </li>
+                            </li> *@
                         }
                         @if (User.IsInRole("Cliente"))
                         {
-                            <li class="nav-item">
+                            @* <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home"
                                    asp-action="Cliente">Cliente</a>
-                            </li>
+                            </li> *@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Pedidos"
                                    asp-action="Index">Meus Pedidos</a>

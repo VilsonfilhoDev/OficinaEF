@@ -191,7 +191,7 @@
             }
             @if (User.IsInRole("Cliente"))
             {
-                <a class="nav__link" asp-controller="Home" asp-action="Cliente">Cliente</a>
+                <a class="nav__link" asp-controller="Pedidos">Cliente</a>
             }
             @if (User.IsInRole("Admin") || User.IsInRole("Atendente"))
             {
