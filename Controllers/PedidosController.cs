@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using OficinaEF.Data;
 using OficinaEF.Models;
+using Stripe.Checkout;
 
 namespace OficinaEF.Controllers;
 
@@ -151,7 +152,7 @@ public class PedidosController : Controller
                 UsuarioId = UsuarioId(User),
                 CodigoSolicitacao = model.CodigoSolicitacao,
                 EnderecoEntrega = model.EnderecoEntrega,
-                FormaPagamento = model.FormaPagamento,
+                FormaPagamento = string.IsNullOrWhiteSpace(model.FormaPagamento) ? "Stripe Checkout (Sandbox)" : $"{model.FormaPagamento} (Stripe Sandbox)",
                 ValorTotal = model.ValorTotal,
                 DataPedido = DateTime.Now,
                 Status = StatusPedido.Recebido,
@@ -176,12 +177,34 @@ public class PedidosController : Controller
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            TempData["Sucesso"] = "Pedido finalizado com sucesso!";
-            // Limpa o carrinho no cliente e redireciona para os detalhes do pedido
-            var urlDetalhes = Url.Action(nameof(Details), new { id = pedido.Id })!;
-            return Content(
-                $"<script>localStorage.removeItem('void.bag.v1'); window.location.href = '{urlDetalhes}';</script>",
-                "text/html");
+            // Cria a sessão oficial no Stripe Sandbox
+            var dominio = $"{Request.Scheme}://{Request.Host}";
+            var opcoesStripe = new SessionCreateOptions
+            {
+                Mode = "payment",
+                CustomerEmail = User.Identity?.Name,
+                SuccessUrl = $"{dominio}/Pedidos/PagamentoSucesso?id={pedido.Id}&session_id={{CHECKOUT_SESSION_ID}}",
+                CancelUrl = $"{dominio}/Pedidos/PagamentoCancelado?id={pedido.Id}",
+                LineItems = model.Itens.Select(item => new SessionLineItemOptions
+                {
+                    Quantity = item.Quantidade,
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        Currency = "brl",
+                        UnitAmount = (long)Math.Round(item.Preco * 100m, MidpointRounding.AwayFromZero),
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Nome
+                        }
+                    }
+                }).ToList()
+            };
+
+            var service = new SessionService();
+            var session = await service.CreateAsync(opcoesStripe);
+
+            Response.Headers["Location"] = session.Url;
+            return new StatusCodeResult(303);
         }
         catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx &&
             (sqlEx.Number == 1205 || sqlEx.Number == 1222))
@@ -190,7 +213,7 @@ public class PedidosController : Controller
             ModelState.AddModelError(string.Empty, "O sistema está momentaneamente ocupado. Tente novamente em instantes.");
             return View(model);
         }
-        catch (DbUpdateException ex)
+        catch (DbUpdateException)
         {
             await transaction.RollbackAsync();
             ModelState.AddModelError(string.Empty, "Não foi possível concluir o pedido. Tente novamente.");
@@ -202,12 +225,71 @@ public class PedidosController : Controller
             ModelState.AddModelError(string.Empty, "O sistema está momentaneamente ocupado. Tente novamente em instantes.");
             return View(model);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            ModelState.AddModelError(string.Empty, "Erro inesperado ao finalizar a compra.");
+            ModelState.AddModelError(string.Empty, $"Erro ao iniciar pagamento Stripe: {ex.Message}");
             return View(model);
         }
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Cliente")]
+    public async Task<IActionResult> PagamentoSucesso(int id, string? session_id)
+    {
+        var usuarioId = UsuarioId(User);
+        var pedido = await _context.Pedidos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId);
+
+        if (pedido is null)
+            return NotFound();
+
+        if (!string.IsNullOrWhiteSpace(session_id))
+        {
+            var service = new SessionService();
+            var session = await service.GetAsync(session_id);
+            if (session.PaymentStatus == "paid")
+            {
+                TempData["Sucesso"] = $"Pagamento aprovado via Stripe Sandbox! Pedido #{pedido.Id} confirmado.";
+            }
+        }
+        else
+        {
+            TempData["Sucesso"] = "Pedido realizado com sucesso!";
+        }
+
+        var urlDetalhes = Url.Action(nameof(Details), new { id = pedido.Id })!;
+        return Content(
+            $"<script>localStorage.removeItem('void.bag.v1'); window.location.href = '{urlDetalhes}';</script>",
+            "text/html");
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Cliente")]
+    public async Task<IActionResult> PagamentoCancelado(int id)
+    {
+        var usuarioId = UsuarioId(User);
+        var pedido = await _context.Pedidos
+            .Include(p => p.Itens)
+            .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId);
+
+        if (pedido is not null && pedido.Status == StatusPedido.Recebido)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            foreach (var item in pedido.Itens)
+            {
+                await _context.Produtos
+                    .Where(p => p.Id == item.ProdutoId)
+                    .ExecuteUpdateAsync(p => p.SetProperty(pr => pr.Estoque, pr => pr.Estoque + item.Quantidade));
+            }
+            pedido.Status = StatusPedido.Cancelado;
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+
+        TempData["Erro"] = "Pagamento cancelado no Stripe. O pedido foi cancelado e o estoque devolvido.";
+        return RedirectToAction(nameof(Details), new { id });
     }
 
     [HttpGet]

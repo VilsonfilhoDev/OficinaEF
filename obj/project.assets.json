@@ -2191,6 +2191,23 @@
           }
         }
       },
+      "Stripe.net/53.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "System.Configuration.ConfigurationManager": "10.0.0"
+        },
+        "compile": {
+          "lib/net10.0/Stripe.net.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Stripe.net.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.ClientModel/1.8.0": {
         "type": "package",
         "dependencies": {
@@ -2333,18 +2350,18 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "System.Configuration.ConfigurationManager/9.0.11": {
+      "System.Configuration.ConfigurationManager/10.0.0": {
         "type": "package",
         "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "9.0.11"
+          "System.Security.Cryptography.ProtectedData": "10.0.0"
         },
         "compile": {
-          "lib/net9.0/System.Configuration.ConfigurationManager.dll": {
+          "lib/net10.0/System.Configuration.ConfigurationManager.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net9.0/System.Configuration.ConfigurationManager.dll": {
+          "lib/net10.0/System.Configuration.ConfigurationManager.dll": {
             "related": ".xml"
           }
         },
@@ -2432,15 +2449,15 @@
           }
         }
       },
-      "System.Security.Cryptography.ProtectedData/9.0.11": {
+      "System.Security.Cryptography.ProtectedData/10.0.0": {
         "type": "package",
         "compile": {
-          "lib/net9.0/System.Security.Cryptography.ProtectedData.dll": {
+          "lib/net10.0/System.Security.Cryptography.ProtectedData.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net9.0/System.Security.Cryptography.ProtectedData.dll": {
+          "lib/net10.0/System.Security.Cryptography.ProtectedData.dll": {
             "related": ".xml"
           }
         },
@@ -6032,6 +6049,30 @@
         "nuget.versioning.nuspec"
       ]
     },
+    "Stripe.net/53.1.0": {
+      "sha512": "Y9MJtM8PKYO6JxEqUFd6Fv6PlkTAoAvF5n0ZKz8nJWFJxKyoAwrSZlI5MUQCT5zrG9zAipB9sV2bk4xX7Lb8Ng==",
+      "type": "package",
+      "path": "stripe.net/53.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "icon.png",
+        "lib/net10.0/Stripe.net.dll",
+        "lib/net10.0/Stripe.net.xml",
+        "lib/net462/Stripe.net.dll",
+        "lib/net462/Stripe.net.xml",
+        "lib/net8.0/Stripe.net.dll",
+        "lib/net8.0/Stripe.net.xml",
+        "lib/net9.0/Stripe.net.dll",
+        "lib/net9.0/Stripe.net.xml",
+        "lib/netstandard2.0/Stripe.net.dll",
+        "lib/netstandard2.0/Stripe.net.xml",
+        "stripe.net.53.1.0.nupkg.sha512",
+        "stripe.net.nuspec"
+      ]
+    },
     "System.ClientModel/1.8.0": {
       "sha512": "AqRzhn0v29GGGLj/Z6gKq4lGNtvPHT4nHdG5PDJh9IfVjv/nYUVmX11hwwws1vDFeIAzrvmn0dPu8IjLtu6fAw==",
       "type": "package",
@@ -6239,21 +6280,22 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Configuration.ConfigurationManager/9.0.11": {
-      "sha512": "vPinosRgEk1CGjohbv0pDuz6gPprkWo5xvBTjOJjks5JOgOEWvPndq5NngGxiTcBcy1+k9GwzZ1c3Bp2fU5ezw==",
+    "System.Configuration.ConfigurationManager/10.0.0": {
+      "sha512": "0B+BzJ6pPMrRzJrVsttKf9MfDj6Syw9xoY+agcS9VssYQali1446+jTf5v1K94AMFUBxLXqDZlaTjO5edaI3jA==",
       "type": "package",
-      "path": "system.configuration.configurationmanager/9.0.11",
+      "path": "system.configuration.configurationmanager/10.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/System.Configuration.ConfigurationManager.targets",
         "buildTransitive/net462/_._",
         "buildTransitive/net8.0/_._",
         "buildTransitive/netcoreapp2.0/System.Configuration.ConfigurationManager.targets",
+        "lib/net10.0/System.Configuration.ConfigurationManager.dll",
+        "lib/net10.0/System.Configuration.ConfigurationManager.xml",
         "lib/net462/System.Configuration.ConfigurationManager.dll",
         "lib/net462/System.Configuration.ConfigurationManager.xml",
         "lib/net8.0/System.Configuration.ConfigurationManager.dll",
@@ -6262,7 +6304,7 @@
         "lib/net9.0/System.Configuration.ConfigurationManager.xml",
         "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll",
         "lib/netstandard2.0/System.Configuration.ConfigurationManager.xml",
-        "system.configuration.configurationmanager.9.0.11.nupkg.sha512",
+        "system.configuration.configurationmanager.10.0.0.nupkg.sha512",
         "system.configuration.configurationmanager.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -6402,15 +6444,14 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Security.Cryptography.ProtectedData/9.0.11": {
-      "sha512": "s8yUYuYYu+PAwvBdhLG1KyrGrk9gkYeuPxfAsXsTqqWyepwSyEw8hAaflW4nO98NG52YpYI1am2+9o+79h2RtQ==",
+    "System.Security.Cryptography.ProtectedData/10.0.0": {
+      "sha512": "qy6C3gQRTrfhFfuiIYU1jNwWfFdJpBVo1BARW7jgMm1zTEm3LRzLLyOLJGaAuKE+nZCGkEP71y4rj9NWjqLGdQ==",
       "type": "package",
-      "path": "system.security.cryptography.protecteddata/9.0.11",
+      "path": "system.security.cryptography.protecteddata/10.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/System.Security.Cryptography.ProtectedData.targets",
@@ -6419,6 +6460,8 @@
         "buildTransitive/netcoreapp2.0/System.Security.Cryptography.ProtectedData.targets",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
+        "lib/net10.0/System.Security.Cryptography.ProtectedData.dll",
+        "lib/net10.0/System.Security.Cryptography.ProtectedData.xml",
         "lib/net462/System.Security.Cryptography.ProtectedData.dll",
         "lib/net462/System.Security.Cryptography.ProtectedData.xml",
         "lib/net8.0/System.Security.Cryptography.ProtectedData.dll",
@@ -6431,7 +6474,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "system.security.cryptography.protecteddata.9.0.11.nupkg.sha512",
+        "system.security.cryptography.protecteddata.10.0.0.nupkg.sha512",
         "system.security.cryptography.protecteddata.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -6445,7 +6488,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 10.0.13",
       "Microsoft.EntityFrameworkCore.SqlServer >= 10.0.13",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.13",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 10.*"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 10.*",
+      "Stripe.net >= 53.1.0"
     ]
   },
   "packageFolders": {
@@ -6529,6 +6573,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[10.*, )"
+          },
+          "Stripe.net": {
+            "target": "Package",
+            "version": "[53.1.0, )"
           }
         },
         "imports": [

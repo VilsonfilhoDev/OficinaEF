@@ -1,7 +1,258 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using OficinaEF.Models
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Dashboard Admin — VØID";
+
+    decimal faturamento = ViewBag.FaturamentoTotal ?? 0m;
+    int recebidos = ViewBag.PedidosRecebidos ?? 0;
+    int concluidos = ViewBag.PedidosConcluidos ?? 0;
+    int cancelados = ViewBag.PedidosCancelados ?? 0;
+    int totalPedidos = ViewBag.TotalPedidos ?? 0;
+    int totalProdutos = ViewBag.TotalProdutos ?? 0;
+    int totalClientes = ViewBag.TotalClientes ?? 0;
+
+    var ultimosPedidos = ViewBag.UltimosPedidos as List<Pedido> ?? new List<Pedido>();
+    var estoqueBaixo = ViewBag.EstoqueBaixo as List<Produto> ?? new List<Produto>();
+    var catNomes = ViewBag.CategoriasNomes as List<string> ?? new List<string>();
+    var catQtd = ViewBag.CategoriasQtd as List<int> ?? new List<int>();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Tela de Admin</h1>
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <span class="text-uppercase" style="font-size:10px; letter-spacing:.28em; color:var(--gold);">PAINEL EXECUTIVO // VØID</span>
+        <h1 class="mb-0 mt-1">DASHBOARD DE ADMINISTRAÇÃO</h1>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a asp-controller="Pedidos" asp-action="Gestao" class="btn btn-primary">Gerenciar Pedidos</a>
+        <a asp-controller="Produtos" asp-action="Create" class="btn btn-secondary">+ Novo Produto</a>
+        <a asp-controller="Categorias" asp-action="Index" class="btn btn-secondary">Categorias</a>
+    </div>
 </div>
+
+<!-- KPI CARDS -->
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="text-uppercase d-block mb-2" style="font-size:10px; letter-spacing:.24em; color:var(--grey);">Faturamento Líquido</span>
+                <div class="preco" style="font-size:42px; line-height:1;">@faturamento.ToString("C")</div>
+                <small class="text-muted d-block mt-2">Pedidos ativos + concluídos</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="text-uppercase d-block mb-2" style="font-size:10px; letter-spacing:.24em; color:var(--grey);">Pedidos Totais</span>
+                <div style="font-family:var(--font-display); font-size:42px; line-height:1; color:var(--white);">@totalPedidos</div>
+                <small style="color:var(--gold-lt);" class="d-block mt-2">@recebidos aguardando envio</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="text-uppercase d-block mb-2" style="font-size:10px; letter-spacing:.24em; color:var(--grey);">Catálogo &amp; Estoque</span>
+                <div style="font-family:var(--font-display); font-size:42px; line-height:1; color:var(--white);">@totalProdutos <span style="font-size:20px; color:var(--grey);">PEÇAS</span></div>
+                <small style="color:@(estoqueBaixo.Any() ? "var(--red-hot)" : "var(--grey)");" class="d-block mt-2">
+                    @estoqueBaixo.Count item(ns) com estoque crítico
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <span class="text-uppercase d-block mb-2" style="font-size:10px; letter-spacing:.24em; color:var(--grey);">Contas Registradas</span>
+                <div style="font-family:var(--font-display); font-size:42px; line-height:1; color:var(--white);">@totalClientes</div>
+                <small class="text-muted d-block mt-2">Base ativa Identity</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GRÁFICOS -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header">Status dos Pedidos</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:280px;">
+                <canvas id="graficoStatus"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-header">Produtos por Categoria</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:280px;">
+                <canvas id="graficoCategorias"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABELAS OPERACIONAIS -->
+<div class="row g-4">
+    <div class="col-12 col-lg-7">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Últimos Pedidos</span>
+                <a asp-controller="Pedidos" asp-action="Gestao" style="font-size:10px; letter-spacing:.2em;">VER TODOS →</a>
+            </div>
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>Data</th>
+                            <th>Pagamento</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!ultimosPedidos.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">Nenhum pedido registrado ainda.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var p in ultimosPedidos)
+                            {
+                                var badgeClass = p.Status switch
+                                {
+                                    StatusPedido.Concluido => "bg-success",
+                                    StatusPedido.Cancelado => "bg-danger",
+                                    _ => "bg-warning"
+                                };
+                                <tr>
+                                    <td><strong>#@p.Id</strong></td>
+                                    <td>@p.DataPedido.ToString("dd/MM HH:mm")</td>
+                                    <td><small>@p.FormaPagamento</small></td>
+                                    <td class="preco fs-5">@p.ValorTotal.ToString("C")</td>
+                                    <td><span class="badge @badgeClass">@p.Status</span></td>
+                                    <td class="text-end">
+                                        <a asp-controller="Pedidos" asp-action="Details" asp-route-id="@p.Id" class="btn btn-secondary btn-sm">Abrir</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Alerta de Estoque (&le; 3 un.)</span>
+                <a asp-controller="Produtos" asp-action="Index" style="font-size:10px; letter-spacing:.2em;">CATÁLOGO →</a>
+            </div>
+            <div class="table-responsive border-0">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Restante</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!estoqueBaixo.Any())
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">Estoque saudável em todos os itens.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var prod in estoqueBaixo)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@prod.Nome</strong>
+                                        <small class="d-block text-muted">@prod.Categoria?.Nome</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(prod.Estoque == 0 ? "bg-danger" : "bg-warning")">@prod.Estoque un.</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-controller="Produtos" asp-action="Edit" asp-route-id="@prod.Id" class="btn btn-secondary btn-sm">Repor</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        Chart.defaults.color = '#9b9a9f';
+        Chart.defaults.font.family = '"Space Grotesk", sans-serif';
+
+        new Chart(document.getElementById('graficoStatus'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Recebidos', 'Concluídos', 'Cancelados'],
+                datasets: [{
+                    data: [@recebidos, @concluidos, @cancelados],
+                    backgroundColor: ['#d9a441', '#f2efed', '#e0121f'],
+                    borderColor: '#111113',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 18, usePointStyle: true }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('graficoCategorias'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(JsonSerializer.Serialize(catNomes)),
+                datasets: [{
+                    label: 'Produtos Cadastrados',
+                    data: @Html.Raw(JsonSerializer.Serialize(catQtd)),
+                    backgroundColor: '#e0121f',
+                    borderColor: '#d9a441',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 },
+                        grid: { color: 'rgba(255,255,255,0.08)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+}

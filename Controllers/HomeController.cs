@@ -45,8 +45,46 @@ public class HomeController : Controller
     }
 
     [Authorize(Roles = "Admin")]
-    public IActionResult Admin()
+    public async Task<IActionResult> Admin()
     {
+        var pedidos = await _context.Pedidos
+            .AsNoTracking()
+            .Include(p => p.Itens)
+            .OrderByDescending(p => p.DataPedido)
+            .ToListAsync();
+
+        var produtos = await _context.Produtos
+            .AsNoTracking()
+            .Include(p => p.Categoria)
+            .ToListAsync();
+
+        ViewBag.FaturamentoTotal = pedidos
+            .Where(p => p.Status != StatusPedido.Cancelado)
+            .Sum(p => p.ValorTotal);
+
+        ViewBag.PedidosRecebidos = pedidos.Count(p => p.Status == StatusPedido.Recebido);
+        ViewBag.PedidosConcluidos = pedidos.Count(p => p.Status == StatusPedido.Concluido);
+        ViewBag.PedidosCancelados = pedidos.Count(p => p.Status == StatusPedido.Cancelado);
+        ViewBag.TotalPedidos = pedidos.Count;
+
+        ViewBag.TotalProdutos = produtos.Count;
+        ViewBag.EstoqueBaixo = produtos.Where(p => p.Estoque <= 3).OrderBy(p => p.Estoque).ToList();
+        ViewBag.TotalClientes = await _context.Users.CountAsync();
+        ViewBag.UltimosPedidos = pedidos.Take(6).ToList();
+
+        // Dados para gráfico de faturamento por categoria
+        var categoriasDados = await _context.Categorias
+            .AsNoTracking()
+            .Select(c => new
+            {
+                Nome = c.Nome,
+                QtdProdutos = c.Produtos.Count
+            })
+            .ToListAsync();
+
+        ViewBag.CategoriasNomes = categoriasDados.Select(c => c.Nome).ToList();
+        ViewBag.CategoriasQtd = categoriasDados.Select(c => c.QtdProdutos).ToList();
+
         return View();
     }
 

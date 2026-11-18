@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OficinaEF.Data;
 using OficinaEF.Infrastructure;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Services.AddControllersWithViews(options =>
     options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
 });
 builder.Services.AddRazorPages();
+
+// Configura a chave secreta do Stripe Sandbox (via user-secrets ou appsettings)
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 var app = builder.Build();
 

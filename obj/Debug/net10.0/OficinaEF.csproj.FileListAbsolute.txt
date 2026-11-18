@@ -413,3 +413,4 @@ C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\r
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.sourcelink.json
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\bcllcij3vu-{0}-9076tekg4e-9076tekg4e.gz
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\compressed\h6b4kmembm-{0}-b7dh8enbhl-b7dh8enbhl.gz
+C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\bin\Debug\net10.0\Stripe.net.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3bv/G9FmXWc=",
+  "dgSpecHash": "P60k02nzbSY=",
   "success": true,
   "projectFilePath": "C:\\Users\\43947806833\\Desktop\\Back_end\\TechStoreMVC\\OficinaEF\\OficinaEF.csproj",
   "expectedPackageFiles": [
@@ -118,6 +118,7 @@
     "C:\\Users\\43947806833\\.nuget\\packages\\nuget.projectmodel\\6.12.1\\nuget.projectmodel.6.12.1.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\nuget.protocol\\6.12.1\\nuget.protocol.6.12.1.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\nuget.versioning\\6.12.1\\nuget.versioning.6.12.1.nupkg.sha512",
+    "C:\\Users\\43947806833\\.nuget\\packages\\stripe.net\\53.1.0\\stripe.net.53.1.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.clientmodel\\1.8.0\\system.clientmodel.1.8.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.composition\\9.0.0\\system.composition.9.0.0.nupkg.sha512",
@@ -126,13 +127,13 @@
     "C:\\Users\\43947806833\\.nuget\\packages\\system.composition.hosting\\9.0.0\\system.composition.hosting.9.0.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.composition.runtime\\9.0.0\\system.composition.runtime.9.0.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.composition.typedparts\\9.0.0\\system.composition.typedparts.9.0.0.nupkg.sha512",
-    "C:\\Users\\43947806833\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.11\\system.configuration.configurationmanager.9.0.11.nupkg.sha512",
+    "C:\\Users\\43947806833\\.nuget\\packages\\system.configuration.configurationmanager\\10.0.0\\system.configuration.configurationmanager.10.0.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.7.1\\system.identitymodel.tokens.jwt.7.7.1.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.memory.data\\8.0.1\\system.memory.data.8.0.1.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.reflection.metadataloadcontext\\8.0.0\\system.reflection.metadataloadcontext.8.0.0.nupkg.sha512",
     "C:\\Users\\43947806833\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.11\\system.security.cryptography.pkcs.9.0.11.nupkg.sha512",
-    "C:\\Users\\43947806833\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.11\\system.security.cryptography.protecteddata.9.0.11.nupkg.sha512"
+    "C:\\Users\\43947806833\\.nuget\\packages\\system.security.cryptography.protecteddata\\10.0.0\\system.security.cryptography.protecteddata.10.0.0.nupkg.sha512"
   ],
   "logs": [
     {
