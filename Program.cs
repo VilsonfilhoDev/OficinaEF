@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OficinaEF.Data;
+using OficinaEF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Aceita preço como "129.90" ou "1.299,90" sem trocar o valor
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+});
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -40,4 +45,4 @@ app.MapControllerRoute(
 
 app.MapRazorPages().WithStaticAssets();
 
-app.Run();      
+app.Run();

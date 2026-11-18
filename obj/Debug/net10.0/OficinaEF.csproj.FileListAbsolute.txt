@@ -266,7 +266,6 @@ C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\O
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.RazorAssemblyInfo.cache
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.RazorAssemblyInfo.cs
-C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\OficinaEF.sourcelink.json
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\43947806833\Desktop\Back_end\TechStoreMVC\OficinaEF\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json

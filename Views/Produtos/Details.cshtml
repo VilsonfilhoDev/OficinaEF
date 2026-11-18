@@ -1,0 +1,29 @@
+@model OficinaEF.Models.Produto
+
+@{
+    ViewData["Title"] = "Detalhes do Produto";
+}
+
+<h1>@Model.Nome</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Categoria</dt>
+    <dd class="col-sm-9">@Model.Categoria?.Nome</dd>
+
+    <dt class="col-sm-3">Preço</dt>
+    <dd class="col-sm-9">@Model.Preco.ToString("C")</dd>
+
+    <dt class="col-sm-3">Disponibilidade</dt>
+    <dd class="col-sm-9">
+        @if (Model.Estoque > 0)
+        {
+            <span class="badge bg-success">@Model.Estoque em estoque</span>
+        }
+        else
+        {
+            <span class="badge bg-danger">Esgotado</span>
+        }
+    </dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar para a lista</a>
